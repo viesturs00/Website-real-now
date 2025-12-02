@@ -175,20 +175,21 @@
             </div>
             <div class="contact-form-wrapper">
                 <div class="contact-form-panel">
-                    <form class="simple-contact-form" id="contact-form-email">
+                    <form class="simple-contact-form" id="contact-form">
                         <div class="form-group">
                             <label for="contact-name">Name</label>
-                            <input type="text" id="contact-name" name="name" placeholder="Jane Smith" required>
+                            <input type="text" id="contact-name" name="name" placeholder="Your name" required>
                         </div>
                         <div class="form-group">
                             <label for="contact-email">Email</label>
-                            <input type="email" id="contact-email" name="email" placeholder="jane@gmail.com" required>
+                            <input type="email" id="contact-email" name="email" placeholder="Your email" required>
                         </div>
                         <div class="form-group">
                             <label for="contact-message">Message</label>
-                            <textarea id="contact-message" name="message" rows="6" placeholder="Ask us any questions you may have!" required></textarea>
+                            <textarea id="contact-message" name="message" rows="6" placeholder="Your message" required></textarea>
                         </div>
-                        <button type="submit" class="contact-submit-btn">Submit</button>
+                        <button type="submit" class="contact-submit-btn">Send</button>
+                        <p id="form-status"></p>
                     </form>
                 </div>
                 <div class="contact-call-bottom">
@@ -246,32 +247,6 @@
                 });
             });
             
-            // Contact form submission
-            const simpleContactForm = document.querySelector('.simple-contact-form');
-            if (simpleContactForm) {
-                simpleContactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Get form data
-                    const name = document.getElementById('contact-name').value;
-                    const email = document.getElementById('contact-email').value;
-                    const message = document.getElementById('contact-message').value;
-                    
-                    // Create mailto link with all form data
-                    const subject = encodeURIComponent('Contact Form Submission from ' + name);
-                    const body = encodeURIComponent('Name: ' + name + '\n\nEmail: ' + email + '\n\nMessage:\n' + message);
-                    const mailtoLink = 'mailto:atclipworks@gmail.com?subject=' + subject + '&body=' + body;
-                    
-                    // Open email client with pre-filled data
-                    window.location.href = mailtoLink;
-                    
-                    // Show success message
-                    alert('Thank you for your message! Your email client should open with the message pre-filled. Please send it to complete your submission.');
-                    
-                    // Reset form
-                    this.reset();
-                });
-            }
         });
     </script>
 </body>

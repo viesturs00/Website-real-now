@@ -123,14 +123,45 @@ if (mobileMenuBtn) {
     });
 }
 
-// Form submission
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+// Contact form submission
+const form = document.getElementById("contact-form");
+const statusEl = document.getElementById("form-status");
+
+if (form) {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to a server
-        alert('Thank you for your submission! We will get back to you soon.');
-        contactForm.reset();
+        statusEl.textContent = "Sending...";
+        statusEl.style.color = "#666";
+
+        const formData = {
+            name: form.name.value,
+            email: form.email.value,
+            message: form.message.value,
+        };
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.ok) throw new Error();
+
+            statusEl.textContent = "Message sent successfully!";
+            statusEl.style.color = "#22c55e";
+            form.reset();
+            
+            // Clear status after 5 seconds
+            setTimeout(() => {
+                statusEl.textContent = "";
+            }, 5000);
+        } catch (error) {
+            statusEl.textContent = "Something went wrong.";
+            statusEl.style.color = "#ff6b35";
+        }
     });
 }
 
