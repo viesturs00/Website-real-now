@@ -1,90 +1,5 @@
-// 3D Canvas Background Animation
-const canvas = document.getElementById('canvas-background');
-if (canvas) {
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
-    
-    // Set canvas size
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    
-    // Create gradient mesh
-    const points = [];
-    const pointCount = 50;
-    
-    // Initialize points
-    for (let i = 0; i < pointCount; i++) {
-        points.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 100 + 50
-        });
-    }
-    
-    function drawMesh() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Update and draw points
-        points.forEach((point, i) => {
-            // Update position
-            point.x += point.vx;
-            point.y += point.vy;
-            
-            // Bounce off edges
-            if (point.x < 0 || point.x > canvas.width) point.vx *= -1;
-            if (point.y < 0 || point.y > canvas.height) point.vy *= -1;
-            
-            // Keep in bounds
-            point.x = Math.max(0, Math.min(canvas.width, point.x));
-            point.y = Math.max(0, Math.min(canvas.height, point.y));
-        });
-        
-        // Draw connections between nearby points with subtle canvas-like lines
-        points.forEach((pointA, i) => {
-            points.slice(i + 1).forEach((pointB) => {
-                const dx = pointB.x - pointA.x;
-                const dy = pointB.y - pointA.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 180) {
-                    const opacity = (1 - distance / 180) * 0.08;
-                    ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.beginPath();
-                    ctx.moveTo(pointA.x, pointA.y);
-                    ctx.lineTo(pointB.x, pointB.y);
-                    ctx.stroke();
-                }
-            });
-            
-            // Draw subtle point orbs
-            const pointGradient = ctx.createRadialGradient(
-                point.x, point.y, 0,
-                point.x, point.y, point.radius * 0.8
-            );
-            pointGradient.addColorStop(0, 'rgba(99, 102, 241, 0.15)');
-            pointGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-            
-            ctx.fillStyle = pointGradient;
-            ctx.beginPath();
-            ctx.arc(point.x, point.y, point.radius * 0.8, 0, Math.PI * 2);
-            ctx.fill();
-        });
-    }
-    
-    function animate() {
-        drawMesh();
-        animationFrameId = requestAnimationFrame(animate);
-    }
-    
-    animate();
-}
+// 3D Canvas Background Animation - Disabled
+// Canvas animation removed to eliminate any faded colors in the background
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -123,47 +38,6 @@ if (mobileMenuBtn) {
     });
 }
 
-// Contact form submission
-const form = document.getElementById("contact-form");
-const statusEl = document.getElementById("form-status");
-
-if (form) {
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        statusEl.textContent = "Sending...";
-        statusEl.style.color = "#666";
-
-        const formData = {
-            name: form.name.value,
-            email: form.email.value,
-            message: form.message.value,
-        };
-
-        try {
-            const res = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok || !data.ok) throw new Error();
-
-            statusEl.textContent = "Message sent successfully!";
-            statusEl.style.color = "#22c55e";
-            form.reset();
-            
-            // Clear status after 5 seconds
-            setTimeout(() => {
-                statusEl.textContent = "";
-            }, 5000);
-        } catch (error) {
-            statusEl.textContent = "Something went wrong.";
-            statusEl.style.color = "#ff6b35";
-        }
-    });
-}
 
 // FAQ accordion - Initialize after page load
 window.addEventListener('load', function() {
@@ -225,81 +99,10 @@ document.querySelectorAll('.service-card, .feature-item, .pricing-card, .testimo
     observer.observe(el);
 });
 
-// Navbar background on scroll - optimized with requestAnimationFrame
-let ticking = false;
-function updateNavbar() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = 'none';
-    }
-    ticking = false;
-}
+// Navbar background on scroll - disabled to keep transparent
+// Navbar stays transparent to show grid background
 
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(updateNavbar);
-        ticking = true;
-    }
-});
-
-// Back to top functionality
-const createBackToTop = () => {
-    const backToTop = document.createElement('button');
-    backToTop.innerHTML = '↑';
-    backToTop.className = 'back-to-top';
-    backToTop.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background-color: var(--text-color);
-        color: var(--bg-color);
-        border: none;
-        border-radius: 50%;
-        font-size: 24px;
-        cursor: pointer;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-        z-index: 999;
-    `;
-    
-    document.body.appendChild(backToTop);
-    
-    // Optimized scroll handler for back-to-top button
-    let backToTopTicking = false;
-    function updateBackToTop() {
-        if (window.scrollY > 500) {
-            backToTop.style.opacity = '1';
-            backToTop.style.pointerEvents = 'auto';
-        } else {
-            backToTop.style.opacity = '0';
-            backToTop.style.pointerEvents = 'none';
-        }
-        backToTopTicking = false;
-    }
-    
-    window.addEventListener('scroll', () => {
-        if (!backToTopTicking) {
-            window.requestAnimationFrame(updateBackToTop);
-            backToTopTicking = true;
-        }
-    });
-    
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-};
-
-createBackToTop();
+// Back to top functionality - removed
 
 // Animate numbers in testimonials (if needed)
 const animateValue = (element, start, end, duration) => {

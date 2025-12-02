@@ -21,7 +21,7 @@
                 <a href="#faq" class="nav-link">Questions</a>
                 <div class="logo"><span style="color: #22c55e;">Clip</span><span class="logo-works" style="color: #000000;">Works</span></div>
                 <a href="#process" class="nav-link">Process</a>
-                <a href="#contact-form" class="nav-link">Message</a>
+                <a href="#contact-section" class="nav-link">Message</a>
             </div>
         </div>
     </nav>
@@ -167,7 +167,7 @@
     </section>
 
     <!-- Contact Form Section -->
-    <section id="contact-form" class="contact-form-section">
+    <section id="contact-section" class="contact-form-section">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Contact Our Team</h2>
@@ -208,7 +208,7 @@
                     <ul>
                         <li><a href="#process">How we work</a></li>
                         <li><a href="#faq">About us</a></li>
-                        <li><a href="#contact-form">Contact Us</a></li>
+                        <li><a href="#contact-section">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -225,6 +225,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="contact.js"></script>
     <script>
         // FAQ Accordion - Direct implementation
         document.addEventListener('DOMContentLoaded', function() {
@@ -249,5 +250,13 @@
             
         });
     </script>
+    
+    <!-- Thank You Popup -->
+    <div id="thankyou-popup" class="hidden">
+        <div class="popup-content">
+            <p>Your message has been received. We will respond as soon as possible.</p>
+            <button id="close-popup">×</button>
+        </div>
+    </div>
 </body>
 </html>
