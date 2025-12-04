@@ -1622,12 +1622,7 @@ div.logo:hover span.logo-works {
 }
 
 .faq-item.active .faq-icon {
-    transform: rotate(180deg);
-    color: var(--orange-dark);
-}
-
-.faq-item.active .faq-icon {
-    transform: rotate(45deg);
+    transform: rotate(0deg);
     color: var(--orange-dark);
 }
 

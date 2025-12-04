@@ -39,41 +39,44 @@ if (mobileMenuBtn) {
 }
 
 
-// FAQ accordion - Initialize after page load
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        const faqItems = document.querySelectorAll('.faq-item');
-        console.log('FAQ items found:', faqItems.length);
+// FAQ accordion - Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(function(item) {
+        const question = item.querySelector('.faq-question');
+        const icon = item.querySelector('.faq-icon');
         
-        faqItems.forEach(function(item, index) {
-            const question = item.querySelector('.faq-question');
-            console.log('Question found for item', index, question);
-            
-            if (question) {
-                question.style.cursor = 'pointer';
+        if (question) {
+            question.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 
-                question.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('FAQ clicked');
-                    
-                    const isActive = item.classList.contains('active');
-                    
-                    // Close all items
-                    faqItems.forEach(function(otherItem) {
-                        otherItem.classList.remove('active');
-                    });
-                    
-                    // Open clicked item if it wasn't active
-                    if (!isActive) {
-                        item.classList.add('active');
-                        console.log('FAQ opened');
-                    } else {
-                        console.log('FAQ closed');
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                faqItems.forEach(function(otherItem) {
+                    otherItem.classList.remove('active');
+                    const otherIcon = otherItem.querySelector('.faq-icon');
+                    if (otherIcon) {
+                        otherIcon.textContent = '+';
                     }
                 });
-            }
-        });
-    }, 100);
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    if (icon) {
+                        icon.textContent = '×';
+                    }
+                } else {
+                    if (icon) {
+                        icon.textContent = '+';
+                    }
+                }
+            });
+        }
+    });
 });
 
 // Scroll animations
@@ -136,8 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observe elements for scroll animations
-    const animateElements = document.querySelectorAll('.benefit-item, .process-step, .faq-item, .contact-form-panel, .pricing-card');
+    // Observe elements for scroll animations (excluding FAQ items to avoid conflicts)
+    const animateElements = document.querySelectorAll('.benefit-item, .process-step, .contact-form-panel, .pricing-card');
     animateElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
